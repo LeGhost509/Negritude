@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>NEGRITUDE — Actualités & Médias</title>
+<meta name="description" content="Plateforme d’actualités modernes, analyses et reportages.">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    /* Palette NEGRITUDE (teal + métal) */
+    --brand: #12C7D3;
+    --brand-700:#0FA4AE;
+    --accent-metal:#9AA3A8;
+    --metal-700:#5B6368;
+    --ink:#1f2937;
+    --bg:#f6f8f9;
+    --card:#ffffff;
+    --muted:#6b7280;
+    --ring: rgba(18,199,211,.35);
+    --shadow: 0 10px 30px rgba(0,0,0,.06), 0 2px 8px rgba(0,0,0,.04);
+    --radius: 14px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --bg:#0b0f14; --card:#0f141a; --ink:#e5e7eb; --muted:#a0a8b3; --shadow: 0 12px 40px rgba(0,0,0,.35), 0 3px 10px rgba(0,0,0,.25);}
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+       background: var(--bg); color: var(--ink); line-height:1.6}
+  /* Topbar + Header */
+  .topbar{background: linear-gradient(90deg, var(--brand) 0%, var(--brand-700) 60%, var(--accent-metal) 100%);
+          color:#002024; padding:.4rem 1rem; font-weight:600; text-align:center}
+  header{position:sticky; top:0; z-index:50; backdrop-filter:saturate(140%) blur(6px);
+         background: color-mix(in oklab, var(--bg) 88%, #000 12%);
+         border-bottom:1px solid color-mix(in oklab, var(--accent-metal) 30%, transparent)}
+  .nav{max-width:1200px; margin:0 auto; padding:.9rem 1.2rem; display:flex; align-items:center; gap:14px}
+  .logo{display:flex; align-items:center; gap:.6rem; text-decoration:none; color:inherit; font-weight:900; letter-spacing:.5px; font-size:1.22rem}
+  .logo img{height:30px; width:auto; display:block; border-radius:6px; box-shadow:0 2px 8px rgba(0,0,0,.12)}
+  .navlinks{margin-left:auto; display:flex; gap:14px; align-items:center; flex-wrap:wrap}
+  .navlinks a{color:var(--ink); text-decoration:none; font-weight:700; padding:.45rem .6rem; border-radius:10px}
+  .navlinks a[data-active="true"], .navlinks a:hover{background: color-mix(in srgb, var(--brand) 12%, transparent)}
+  .btn{appearance:none; border:0; border-radius:999px; padding:.55rem 1rem; font-weight:800; cursor:pointer;
+       background: linear-gradient(180deg, var(--brand), var(--brand-700)); color:#003238; box-shadow:0 6px 14px var(--ring)}
+  .toggle{background: transparent; border:1.5px solid color-mix(in oklab, var(--accent-metal) 45%, transparent);
+          padding:.45rem .7rem; border-radius:10px; font-weight:700; cursor:pointer; color:var(--ink)}
+  /* Layout */
+  .wrap{max-width:1200px; margin:22px auto; padding:0 1.2rem}
+  .grid{display:grid; grid-template-columns: 1.5fr .9fr; gap:24px}
+  @media (max-width:980px){ .grid{grid-template-columns:1fr} }
+  /* Hero */
+  .hero{position:relative; overflow:hidden; border-radius: var(--radius); box-shadow: var(--shadow);
+        background: linear-gradient(180deg, color-mix(in srgb, var(--brand) 14%, var(--card) 86%), var(--card)); padding:22px}
+  .badge{display:inline-flex; gap:8px; align-items:center; font-weight:800; font-size:.82rem; color:#003238;
+         background:#c9f6fa; border:1px solid #a0eaf0; padding:.35rem .6rem; border-radius:999px}
+  .hero h1{margin:.6rem 0 0; font-size: clamp(1.6rem, 2.6vw, 2.2rem); line-height:1.15}
+  .hero p{color:var(--muted); margin:.5rem 0 1rem}
+  .hero .meta{display:flex; gap:14px; align-items:center; color:var(--metal-700); font-weight:600; font-size:.9rem}
+  /* Cards */
+  .cards{display:grid; grid-template-columns: repeat(3, 1fr); gap:16px; margin-top:18px}
+  @media (max-width:980px){ .cards{grid-template-columns:1fr 1fr} }
+  @media (max-width:640px){ .cards{grid-template-columns:1fr} }
+  .card{background:var(--card); border-radius: var(--radius); overflow:hidden; box-shadow: var(--shadow);
+        display:flex; flex-direction:column; min-height:100%; border:1px solid color-mix(in oklab, var(--accent-metal) 20%, transparent)}
+  .thumb{aspect-ratio:16/9; background:linear-gradient(135deg, var(--accent-metal), var(--metal-700))}
+  .content{padding:14px 14px 16px}
+  .kicker{color:var(--brand-700); text-transform:uppercase; font-weight:800; font-size:.75rem; letter-spacing:.12em}
+  .card h3{margin:.3rem 0; font-size:1.05rem; line-height:1.25}
+  .card p{margin:.3rem 0; color:var(--muted); font-size:.95rem}
+  .by{display:flex; gap:10px; align-items:center; font-size:.85rem; color:var(--metal-700); margin-top:auto}
+  .by img{width:26px; height:26px; border-radius:50%; border:2px solid color-mix(in srgb, var(--brand) 35%, white)}
+  /* Sidebar */
+  .panel{background:var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding:16px;
+         border:1px solid color-mix(in oklab, var(--accent-metal) 20%, transparent)}
+  .panel h4{margin:4px 0 12px; font-size:1.05rem}
+  .list{display:grid; gap:12px}
+  .list a{display:grid; grid-template-columns:64px 1fr; gap:10px; text-decoration:none; color:inherit; align-items:center;
+          padding:8px; border-radius:12px}
+  .list a:hover{background: color-mix(in srgb, var(--brand) 10%, transparent)}
+  .mini{width:64px; height:48px; border-radius:10px; background:linear-gradient(135deg, var(--brand), var(--brand-700));
+        box-shadow: inset 0 0 0 2px #0d4044}
+  .title{font-weight:800; line-height:1.25}
+  .sub{color:var(--muted); font-size:.9rem}
+  /* Footer */
+  footer{margin-top:40px; border-top:1px solid color-mix(in oklab, var(--accent-metal) 25%, transparent);
+         padding:28px 1.2rem; background:color-mix(in oklab, var(--bg) 80%, #000 20%)}
+  .foot{max-width:1200px; margin:0 auto; display:flex; gap:18px; align-items:center; justify-content:space-between; flex-wrap:wrap; color:var(--muted)}
+  /* Admin modal / forms / chips */
+  dialog{border:none; border-radius:16px; box-shadow: var(--shadow); padding:0; width:min(720px, 92vw)}
+  .modal{padding:18px}
+  .row{display:grid; grid-template-columns:1fr 1fr; gap:12px}
+  @media (max-width:640px){ .row{grid-template-columns:1fr} }
+  .field{display:flex; flex-direction:column; gap:6px}
+  .field input, .field select, .field textarea{
+    width:100%; padding:.6rem .75rem; border-radius:12px; border:1.5px solid var(--accent-metal);
+    background:var(--card); color:var(--ink)
+  }
+  .chips{display:flex; gap:8px; flex-wrap:wrap}
+  .chip{background:#d8fbfe; border:1px solid #a7eef4; color:#003238; font-weight:800; padding:.2rem .55rem; border-radius:999px; font-size:.78rem}
+  .actions{display:flex; gap:10px; justify-content:flex-end; margin-top:14px}
+  .danger{background:#ffe2e2; color:#7a0012; border:1px solid #ffbcbc; border-radius:10px; padding:.45rem .7rem; font-weight:800}
+  .muted{color:var(--muted)}
+  .hidden{display:none !important}
+  .share{display:flex; gap:8px; flex-wrap:wrap; margin-top:8px}
+  .share a, .share button{border:1px solid color-mix(in srgb, var(--accent-metal) 45%, transparent); border-radius:999px; padding:.35rem .6rem; text-decoration:none; color:inherit; background:transparent; cursor:pointer}
+  .tag{display:inline-block; padding:.2rem .5rem; border-radius:999px; font-size:.78rem; font-weight:800; color:#003238; background:#d8fbfe; border:1px solid #a7eef4}
+</style>
+</head>
+<body>
+  <div class="topbar">🌐 ÉDITION MONDIALE — Couverture en continu · Analyses, politique, économie, tech & sport</div>
+
+  <header>
+    <nav class="nav" aria-label="Navigation principale">
+      <a class="logo" href="#" id="logoLink">
+        <img id="logoImg" alt="Logo NEGRITUDE" src="" />
+        <span>NEGRITUDE</span>
+      </a>
+      <div class="navlinks" role="menubar">
+        <a href="#" data-section="home" data-active="true">À la une</a>
+        <a href="#" data-section="Politique">Politique</a>
+        <a href="#" data-section="Monde">Monde</a>
+        <a href="#" data-section="Économie">Économie</a>
+        <a href="#" data-section="Tech">Tech</a>
+        <a href="#" data-section="Sport">Sport</a>
+        <button class="toggle" id="themeToggle" aria-pressed="false">🌙 Mode sombre</button>
+        <button class="btn" id="subscribeOpen">S’abonner</button>
+        <button class="btn" id="loginOpen" title="Espace éditeurs">Se connecter</button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="wrap">
+    <section class="grid" aria-label="Contenu principal">
+      <!-- Left column -->
+      <div>
+        <!-- À la une -->
+        <article class="hero" aria-labelledby="headline">
+          <span class="badge">À LA UNE</span>
+          <h1 id="headline">—</h1>
+          <p id="headlineDesc" class="muted">—</p>
+          <div class="meta">
+            <span class="tag">En direct</span>
+            <span id="headlineTime">Mis à jour —</span>
+          </div>
+          <div class="share" id="headlineShare"></div>
+        </article>
+
+        <!-- Cards for selected category -->
+        <div class="cards" id="cards"></div>
+      </div>
+
+      <!-- Sidebar -->
+      <aside class="panel" aria-label="Dernières brèves">
+        <h4>🗞️ Dernières brèves</h4>
+        <div class="list" id="ticker"></div>
+
+        <div class="mt-22">
+          <h4>📬 Newsletter</h4>
+          <p class="muted">Recevez l’essentiel par e-mail ou SMS. Vous pourrez vous désabonner à tout moment.</p>
+          <form id="subForm" class="row" onsubmit="return false;">
+            <div class="field">
+              <label for="subEmail">E-mail</label>
+              <input id="subEmail" type="email" placeholder="vous@exemple.com">
+            </div>
+            <div class="field">
+              <label for="subPhone">Téléphone (optionnel)</label>
+              <input id="subPhone" type="tel" placeholder="+509 5555-5555">
+            </div>
+            <div class="actions" style="grid-column:1/-1">
+              <button class="btn" id="subSave">S’inscrire</button>
+              <button class="danger" id="subUnsub">Se désabonner</button>
+            </div>
+            <small class="muted" id="subInfo">Aucune donnée n’est envoyée à un serveur dans cette démo (stockée localement).</small>
+          </form>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <footer>
+    <div class="foot">
+      <div>© <span id="year"></span> NEGRITUDE — Tous droits réservés</div>
+      <div style="display:flex; gap:12px">
+        <a href="#" class="muted">À propos</a>
+        <a href="#" class="muted" id="settingsOpen">Paramètres</a>
+        <a href="#" class="muted">Mentions légales</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Modals -->
+  <!-- Login / Admin -->
+  <dialog id="loginModal">
+    <div class="modal">
+      <h3>Espace éditeurs</h3>
+      <p class="muted">Connectez-vous pour publier. Le propriétaire peut inviter d’autres éditeurs.</p>
+      <div class="row">
+        <div class="field">
+          <label>Email</label>
+          <input id="loginEmail" type="email" placeholder="vous@media.com">
+        </div>
+        <div class="field">
+          <label>Mot de passe</label>
+          <input id="loginPass" type="password" placeholder="••••••••">
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn" id="doLogin">Se connecter</button>
+        <button class="toggle" onclick="document.getElementById('loginModal').close()">Fermer</button>
+      </div>
+      <hr>
+      <div id="adminArea" class="hidden">
+        <h4>👑 Panneau propriétaire / éditeur</h4>
+
+        <details open>
+          <summary><strong>Nouvel article</strong></summary>
+          <div class="row">
+            <div class="field">
+              <label>Titre</label>
+              <input id="postTitle">
+            </div>
+            <div class="field">
+              <label>Catégorie</label>
+              <select id="postCategory">
+                <option>À la une</option>
+                <option>Politique</option>
+                <option>Monde</option>
+                <option>Économie</option>
+                <option>Tech</option>
+                <option>Sport</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label>Résumé</label>
+            <textarea id="postSummary" rows="3"></textarea>
+          </div>
+          <div class="row">
+            <div class="field">
+              <label>Image (URL) — optionnel</label>
+              <input id="postImage" placeholder="https://…">
+            </div>
+            <div class="field">
+              <label>Mettre « À la une »</label>
+              <select id="postFeatured">
+                <option value="no" selected>Non</option>
+                <option value="yes">Oui (remplace la une)</option>
+              </select>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="btn" id="postSave">Publier</button>
+          </div>
+        </details>
+
+        <details class="mt-18">
+          <summary><strong>Inviter / gérer les éditeurs</strong></summary>
+          <div class="row">
+            <div class="field">
+              <label>Email de l’éditeur</label>
+              <input id="pubEmail" type="email" placeholder="auteur@media.com">
+            </div>
+            <div class="field">
+              <label>Rôle</label>
+              <select id="pubRole">
+                <option value="publisher">Éditeur (publier)</option>
+                <option value="owner">Propriétaire (tout accès)</option>
+              </select>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="btn" id="pubAdd">Autoriser</button>
+            <button class="danger" id="pubRemove">Retirer</button>
+          </div>
+          <p class="muted">Éditeurs autorisés :</p>
+          <div id="pubList" class="chips"></div>
+        </details>
+
+        <details class="mt-18">
+          <summary><strong>Articles publiés</strong></summary>
+          <div id="postsList" class="chips"></div>
+        </details>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Subscribe confirmation -->
+  <dialog id="subscribeModal">
+    <div class="modal">
+      <h3>Abonnement</h3>
+      <p id="subscribeMsg">—</p>
+      <div class="actions">
+        <button class="btn" onclick="document.getElementById('subscribeModal').close()">OK</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Settings: logo upload -->
+  <dialog id="settingsModal">
+    <div class="modal">
+      <h3>Paramètres du site</h3>
+      <div class="field">
+        <label>Logo (PNG/JPG) — sera enregistré localement</label>
+        <input type="file" id="logoUpload" accept="image/*">
+      </div>
+      <div class="actions">
+        <button class="btn" id="saveLogo">Enregistrer</button>
+        <button class="toggle" onclick="document.getElementById('settingsModal').close()">Fermer</button>
+      </div>
+      <small class="muted">Astuce : chargez ici le logo turquoise/gris que vous avez fourni. Il sera utilisé partout.</small>
+    </div>
+  </dialog>
+
+<script>
+/* ===============================
+   Simple CMS — Local-first (demo)
+   Replace localStorage/Data with your API later.
+=================================*/
+const LS = {
+  postsKey: 'negritude_posts',
+  subsKey: 'negritude_subscribers',
+  usersKey:'negritude_users',
+  sessionKey:'negritude_session',
+  logoKey:'negritude_logo'
+};
+
+// seed owner account (first time)
+(function seed(){
+  const users = JSON.parse(localStorage.getItem(LS.usersKey) || '[]');
+  if(users.length===0){
+    users.push({email:'owner@negritude.local', pass:'negritude', role:'owner'});
+    localStorage.setItem(LS.usersKey, JSON.stringify(users));
+  }
+  if(!localStorage.getItem(LS.postsKey)){
+    const now = Date.now();
+    const sample = [
+      {id: crypto.randomUUID(), title:"Bienvenue sur NEGRITUDE",
+       summary:"Votre média — actualités, analyses et reportages.",
+       category:"À la une", image:"", featured:true, author:"Rédaction", ts:now-1000*60*5},
+      {id: crypto.randomUUID(), title:"Sommet régional : 5 points clés",
+       summary:"Sécurité, énergie, commerce — ce qui change.",
+       category:"Monde", image:"", featured:false, author:"Rédaction", ts:now-1000*60*20},
+      {id: crypto.randomUUID(), title:"Technologies : nouveaux standards de sécurité",
+       summary:"IA, chiffrement et conformité.",
+       category:"Tech", image:"", featured:false, author:"M. Diallo", ts:now-1000*60*40},
+      {id: crypto.randomUUID(), title:"Économie : tendances de la semaine",
+       summary:"Inflation, emploi, énergie.",
+       category:"Économie", image:"", featured:false, author:"L. Moreau", ts:now-1000*60*60}
+    ];
+    localStorage.setItem(LS.postsKey, JSON.stringify(sample));
+  }
+})();
+
+/* Helpers */
+const $ = s=>document.querySelector(s);
+const $$ = s=>document.querySelectorAll(s);
+const timeAgo = t=>{
+  const diff = (Date.now()-t)/1000;
+  if(diff<60) return "à l’instant";
+  if(diff<3600) return `il y a ${Math.floor(diff/60)} min`;
+  if(diff<86400) return `il y a ${Math.floor(diff/3600)} h`;
+  const d=Math.floor(diff/86400); return `il y a ${d} j`;
+};
+const readPosts = ()=> JSON.parse(localStorage.getItem(LS.postsKey) || '[]').sort((a,b)=>b.ts-a.ts);
+const savePosts = p=> localStorage.setItem(LS.postsKey, JSON.stringify(p));
+const readUsers = ()=> JSON.parse(localStorage.getItem(LS.usersKey) || '[]');
+const saveUsers = u=> localStorage.setItem(LS.usersKey, JSON.stringify(u));
+const readSubs  = ()=> JSON.parse(localStorage.getItem(LS.subsKey) || '[]');
+const saveSubs  = s=> localStorage.setItem(LS.subsKey, JSON.stringify(s));
+const setSession = s=> localStorage.setItem(LS.sessionKey, JSON.stringify(s));
+const getSession = ()=> JSON.parse(localStorage.getItem(LS.sessionKey) || 'null');
+
+/* Logo load */
+(function loadLogo(){
+  const data = localStorage.getItem(LS.logoKey);
+  const img = document.getElementById('logoImg');
+  if(data){ img.src = data; } else {
+    // fallback: styled square using brand colors
+    const svg = encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' width='120' height='32'>
+      <defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='#12C7D3'/><stop offset='1' stop-color='#0FA4AE'/></linearGradient></defs>
+      <rect rx='6' ry='6' width='120' height='32' fill='url(#g)'/>
+      <text x='10' y='21' fill='#003238' font-size='14' font-weight='800' font-family='Inter, Arial'>NEGRITUDE</text>
+    </svg>`);
+    img.src = `data:image/svg+xml;charset=UTF-8,${svg}`;
+  }
+})();
+
+/* Routing (sections) */
+let currentSection = 'home';
+$$('.navlinks a[data-section]').forEach(a=>{
+  a.addEventListener('click', e=>{
+    e.preventDefault();
+    currentSection = a.dataset.section;
+    $$('.navlinks a[data-section]').forEach(x=>x.removeAttribute('data-active'));
+    a.setAttribute('data-active','true');
+    render();
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+});
+
+/* Theme toggle */
+const themeBtn = $('#themeToggle');
+let dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+function setThemeLabel(){
+  themeBtn.textContent = dark ? '☀️ Mode clair' : '🌙 Mode sombre';
+  themeBtn.setAttribute('aria-pressed', String(dark));
+}
+setThemeLabel();
+themeBtn.addEventListener('click', ()=>{ dark = !dark; document.documentElement.style.colorScheme = dark?'dark':'light'; setThemeLabel();});
+
+/* Subscribe modal open */
+$('#subscribeOpen').addEventListener('click', e=>{
+  e.preventDefault();
+  $('#subscribeModal').showModal();
+  $('#subscribeMsg').textContent = "Astuce : remplissez le formulaire à droite (email/téléphone) puis cliquez sur S’inscrire.";
+});
+
+/* Settings (logo upload) */
+$('#settingsOpen').addEventListener('click', e=>{
+  e.preventDefault();
+  $('#settingsModal').showModal();
+});
+$('#saveLogo').addEventListener('click', async ()=>{
+  const file = $('#logoUpload').files[0];
+  if(!file){ alert('Sélectionnez un fichier.'); return; }
+  const reader = new FileReader();
+  reader.onload = ()=> {
+    localStorage.setItem(LS.logoKey, reader.result);
+    $('#settingsModal').close();
+    location.reload();
+  };
+  reader.readAsDataURL(file);
+});
+
+/* Subscribe form */
+$('#subSave').addEventListener('click', ()=>{
+  const email = $('#subEmail').value.trim();
+  const phone = $('#subPhone').value.trim();
+  if(!email && !phone){ alert('Entrez au moins un e-mail ou un téléphone.'); return; }
+  const subs = readSubs();
+  const id = email || phone;
+  if(subs.find(s=>s.id===id)){ alert('Vous êtes déjà inscrit.'); return; }
+  subs.push({id, email, phone, active:true, ts: Date.now()});
+  saveSubs(subs);
+  $('#subscribeModal').showModal();
+  $('#subscribeMsg').textContent = "Merci ! Vous êtes maintenant abonné. Vous pouvez vous désabonner à tout moment.";
+  $('#subEmail').value=''; $('#subPhone').value='';
+});
+$('#subUnsub').addEventListener('click', ()=>{
+  const email = $('#subEmail').value.trim();
+  const phone = $('#subPhone').value.trim();
+  const id = email || phone;
+  if(!id){ alert('Entrez l’email ou le téléphone à désabonner.'); return; }
+  let subs = readSubs();
+  subs = subs.map(s=> s.id===id ? {...s, active:false} : s);
+  saveSubs(subs);
+  $('#subscribeModal').showModal();
+  $('#subscribeMsg').textContent = "Votre abonnement a été désactivé.";
+});
+
+/* Login + Admin */
+$('#loginOpen').addEventListener('click', e=>{
+  e.preventDefault();
+  $('#loginModal').showModal();
+  const sess = getSession();
+  if(sess){ $('#adminArea').classList.remove('hidden'); }
+});
+$('#doLogin').addEventListener('click', ()=>{
+  const email = $('#loginEmail').value.trim();
+  const pass  = $('#loginPass').value.trim();
+  const users = readUsers();
+  const user = users.find(u=>u.email===email && u.pass===pass);
+  if(!user){ alert('Identifiants invalides. (Astuce: owner@negritude.local / negritude)'); return; }
+  setSession({email:user.email, role:user.role});
+  $('#adminArea').classList.remove('hidden');
+  refreshAdminLists();
+});
+$('#pubAdd').addEventListener('click', ()=>{
+  const sess = getSession(); if(!sess || (sess.role!=='owner')){ return alert('Réservé au propriétaire.'); }
+  const email = $('#pubEmail').value.trim(); if(!email) return;
+  const role = $('#pubRole').value;
+  const users = readUsers();
+  if(users.find(u=>u.email===email)){ alert('Utilisateur existant.'); return; }
+  users.push({email, pass:'changeme', role});
+  saveUsers(users); refreshAdminLists();
+  alert('Éditeur autorisé. Mot de passe par défaut: "changeme".');
+});
+$('#pubRemove').addEventListener('click', ()=>{
+  const sess = getSession(); if(!sess || (sess.role!=='owner')){ return alert('Réservé au propriétaire.'); }
+  const email = $('#pubEmail').value.trim(); if(!email) return;
+  let users = readUsers();
+  users = users.filter(u=>u.email!==email);
+  saveUsers(users); refreshAdminLists();
+});
+$('#postSave').addEventListener('click', ()=>{
+  const sess = getSession(); if(!sess){ return alert('Connectez-vous.'); }
+  const title = $('#postTitle').value.trim();
+  const category = $('#postCategory').value;
+  const summary = $('#postSummary').value.trim();
+  const image = $('#postImage').value.trim();
+  const featured = $('#postFeatured').value==='yes';
+  if(!title || !summary){ return alert('Titre et résumé sont requis.'); }
+  const posts = readPosts();
+  const p = {id: crypto.randomUUID(), title, summary, category, image, featured, author:sess.email, ts: Date.now()};
+  if(featured){
+    // unset previous featured
+    posts.forEach(x=>{ if(x.featured) x.featured=false; });
+  }
+  posts.push(p); savePosts(posts);
+  $('#postTitle').value=''; $('#postSummary').value=''; $('#postImage').value='';
+  render(); refreshAdminLists();
+  alert('Article publié.');
+});
+
+function refreshAdminLists(){
+  // publishers
+  const list = $('#pubList');
+  list.innerHTML='';
+  readUsers().forEach(u=>{
+    const div = document.createElement('span');
+    div.className='chip';
+    div.textContent = `${u.email} · ${u.role}`;
+    list.appendChild(div);
+  });
+  // posts
+  const postsWrap = $('#postsList'); postsWrap.innerHTML='';
+  readPosts().forEach(p=>{
+    const s = document.createElement('span'); s.className='chip';
+    s.textContent = `${p.category} — ${p.title}`;
+    postsWrap.appendChild(s);
+  });
+}
+
+/* Render */
+function render(){
+  const posts = readPosts();
+  // Headline = latest featured or latest post
+  const featured = posts.find(p=>p.featured) || posts[0];
+  if(featured){
+    $('#headline').textContent = featured.title;
+    $('#headlineDesc').textContent = featured.summary;
+    $('#headlineTime').textContent = `Mis à jour ${timeAgo(featured.ts)}`;
+    // share
+    const shareBox = $('#headlineShare'); shareBox.innerHTML='';
+    shareBox.appendChild(makeShareUI(featured));
+  }
+  // Category cards
+  const container = $('#cards'); container.innerHTML='';
+  const section = currentSection;
+  const categoryPosts = section==='home' ? posts.filter(p=>!p.featured).slice(0,6)
+    : posts.filter(p=>p.category===section).slice(0,9);
+
+  categoryPosts.forEach(p=>{
+    const card = document.createElement('article'); card.className='card';
+    const thumb = document.createElement('div'); thumb.className='thumb';
+    if(p.image){ thumb.style.backgroundImage = `url('${p.image}')`; thumb.style.backgroundSize='cover'; thumb.style.backgroundPosition='center'; }
+    const content = document.createElement('div'); content.className='content';
+    const kicker = document.createElement('div'); kicker.className='kicker'; kicker.textContent = p.category;
+    const h3 = document.createElement('h3'); h3.textContent = p.title;
+    const desc = document.createElement('p'); desc.textContent = p.summary;
+    const by = document.createElement('div'); by.className='by';
+    by.innerHTML = `<img alt="Auteur"><span>Par ${p.author || 'Rédaction'} · ${timeAgo(p.ts)}</span>`;
+    const share = makeShareUI(p);
+    content.append(kicker,h3,desc,share,by);
+    card.append(thumb, content);
+    container.appendChild(card);
+  });
+
+  // Dernières brèves (10 dernières)
+  const ticker = $('#ticker'); ticker.innerHTML='';
+  posts.slice(0,10).forEach(p=>{
+    const a = document.createElement('a'); a.href="#";
+    const m = document.createElement('div'); m.className='mini';
+    const box = document.createElement('div');
+    const t = document.createElement('div'); t.className='title'; t.textContent = p.title;
+    const sb = document.createElement('div'); sb.className='sub'; sb.textContent = `${p.category} · ${timeAgo(p.ts)}`;
+    box.append(t,sb); a.append(m,box); ticker.appendChild(a);
+  });
+
+  // update active nav label when home
+  $$('.navlinks a[data-section]').forEach(x=> x.dataset.active = (x.dataset.section===section ? "true" : "false"));
+}
+
+/* Share UI */
+function makeShareUI(post){
+  const box = document.createElement('div'); box.className='share';
+  const url = location.href.split('#')[0] + '#'+ encodeURIComponent(post.title.toLowerCase().replaceAll(' ','-'));
+  const text = `${post.title} — via NEGRITUDE`;
+
+  // WhatsApp
+  const w = document.createElement('a');
+  w.href = `https://api.whatsapp.com/send?text=${encodeURIComponent(text + ' ' + url)}`;
+  w.target = "_blank"; w.rel="noopener"; w.textContent = 'WhatsApp';
+  // Facebook
+  const f = document.createElement('a');
+  f.href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+  f.target="_blank"; f.rel="noopener"; f.textContent = 'Facebook';
+  // Natif (mobile)
+  const b = document.createElement('button');
+  b.textContent = 'Partager';
+  b.onclick = async ()=>{
+    if(navigator.share){ try{ await navigator.share({title: post.title, text, url}); } catch(e){} }
+    else { navigator.clipboard.writeText(url); alert('Lien copié.'); }
+  };
+  // Copie (pour Instagram/TikTok description)
+  const c = document.createElement('button');
+  c.textContent = 'Copier le lien';
+  c.onclick = ()=>{ navigator.clipboard.writeText(`${text}\n${url}`); alert('Copié — à coller dans Instagram/TikTok.'); };
+
+  box.append(w,f,b,c);
+  return box;
+}
+
+/* Init */
+document.getElementById('year').textContent = new Date().getFullYear();
+render();
+
+/* Live ticker refresh every 30s to simulate feed */
+setInterval(render, 30000);
+</script>
+</body>
+</html>
